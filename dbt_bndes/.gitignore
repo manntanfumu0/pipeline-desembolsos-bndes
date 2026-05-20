@@ -1,0 +1,18 @@
+# Chaves de segurança e credenciais da nuvem
+gcp_credentials.json
+*.json
+
+# Dependências e caches locais
+__pycache__/
+*.pyc
+.dbt/
+dbt_modules/
+logs/
+target/
+
+#credenciais
+credenciais-gcp.json
+
+# Outros ficheiros do sistema
+.DS_Store
+.env

@@ -1,0 +1,7 @@
+pandas
+requests
+google-cloud-storage
+pyarrow
+dbt-core
+dbt-bigquery
+

@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: ckan_bndes
+    database: projeto-bndes-496820
+    schema: raw_bndes
+    tables:
+      - name: ext_desembolsos
