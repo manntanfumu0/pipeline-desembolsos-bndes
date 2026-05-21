@@ -24,24 +24,25 @@ O fluxo foi desenhado seguindo a arquitetura ELT (Extract, Load, Transform) acop
 ### 1. Ingestão de Dados e Conteinerização (Docker)
 O script Python realiza chamadas eficientes para a API pública do governo. O isolamento do ambiente via contêiner garante portabilidade total da aplicação.
 
-![Execução do script de ingestão no Docker](img/Ingestão.jpg)
+![Execução do script de ingestão no Docker](img/ingestao.jpg)
+
 
 ### 2. Armazenamento na Nuvem (Google Cloud Storage)
 Os dados persistidos pelo contêiner são organizados de maneira estruturada dentro de buckets na GCP em formato Parquet.
 
-![Estrutura do Bucket no GCS](img/GCP.png)
+![Estrutura do Bucket no GCS](img/gcp.png)
 
 ### 3. Integração e Consultas no BigQuery
 Criação do Dataset corporativo `raw_bndes` e configuração das External Tables para ler os dados do Storage em tempo real via SQL de alta performance.
 
-![Tabelas mapeadas no BigQuery](img/BIGQUERY.png)
+![Tabelas mapeadas no BigQuery](img/bigquery.png)
 
-![Resultados de validação SQL no DW](img/CONSULTA SQL.png)
+![Resultados de validação SQL no DW](img/consulta-sql.png)
 
 ### 4. Tomada de Decisão (Dashboard Looker Studio)
 Painel interativo final com os KPIs essenciais de liberação de verbas, volumetria por setor econômico e evolução histórica dos desembolsos.
 
-![Dashboard de Desembolsos BNDES](img/Relatorio.png)
+![Dashboard de Desembolsos BNDES](img/relatorio.png)
 
 ---
 
