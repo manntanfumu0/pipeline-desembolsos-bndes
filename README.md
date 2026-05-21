@@ -73,7 +73,6 @@ A tabela final disponibilizada para consumo de Business Intelligence contém a s
 
 ---
 
-## 🚀 Como Executar o Projeto
 
 ## 🚀 Como Executar o Projeto
 
