@@ -2,15 +2,18 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Comando obrigatório para instalar o git no linux slim
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+# Instala dependências do sistema se necessário (o git pode ser ignorado na ingestão pura)
+RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copia todos os arquivos locais (incluindo extract_bndes.py e credentials.json)
 COPY . .
 
-ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credenciais-gcp.json
+# Variável que aponta para o JSON de credenciais que você baixou da GCP
+ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 
-CMD ["dbt", "debug", "--project-dir", "/app/dbt_bndes", "--profiles-dir", "/root/.dbt"]
+# Força o container a executar estritamente o script da ingestão
+CMD ["python", "extract_bndes.py"]
 
