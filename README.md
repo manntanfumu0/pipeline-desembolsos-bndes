@@ -75,31 +75,52 @@ A tabela final disponibilizada para consumo de Business Intelligence contém a s
 
 ## 🚀 Como Executar o Projeto
 
+## 🚀 Como Executar o Projeto
+
 ### Pré-requisitos
-* Git instalado
-* Docker e Docker Compose instalados
-* Uma conta ativa na Google Cloud Platform (GCP) com uma Service Account gerada (formato JSON).
 
-### Passo a Passo
+- Git instalado
+- Docker e Docker Compose instalados
+- Uma conta ativa na Google Cloud Platform (GCP) com uma Service Account gerada (formato JSON)
 
-1. **Clonar o Repositório:**
-   ```bash
-git clone [https://github.com/seu-usuario/projeto_bndes.git](https://github.com/seu-usuario/projeto_bndes.git)
-   cd projeto_bndes
+---
 
-   2. **Configurar Credenciais**:
-   Insira o arquivo JSON da sua chave GCP na raiz do projeto e mude o nome dele para credentials.json (ou o nome definido no seu arquivo .env).
+### 1. Clonar o Repositório
 
-Crie um arquivo .env baseado nas configurações do seu ambiente de nuvem.
+```bash
+git clone https://github.com/seu-usuario/projeto_bndes.git
 
-Construir e Rodar o Container de Ingestão:
-   git clone [https://github.com/seu-usuario/projeto_bndes.git](https://github.com/seu-usuario/projeto_bndes.git)
-   cd projeto_bndes
+cd projeto_bndes
+```
 
-  3. **Construir e Rodar o Container de Ingestão**:
-     docker-compose up --build
+---
 
-  4. **Executar as Transformações dbt**:
-(Garantir o profiles.yml configurado apontando para o seu BigQuery)
+### 2. Configurar Credenciais
+
+Insira o arquivo JSON da sua chave GCP na raiz do projeto e renomeie para:
+
+```bash
+credentials.json
+```
+
+Crie também um arquivo `.env` com as variáveis do seu ambiente.
+
+---
+
+### 3. Construir e Rodar o Container
+
+```bash
+docker-compose up --build
+```
+
+---
+
+### 4. Executar as Transformações dbt
+
+(Garantir o `profiles.yml` configurado apontando para o BigQuery)
+
+```bash
 dbt run
+
 dbt test
+```
