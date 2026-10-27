@@ -1,187 +1,100 @@
-# Hi, I'm Manuel 👋
+ Analytics Engineering: Pipeline de Desembolsos do BNDES
 
-### Junior AI Engineer | Generative AI | LLMs | Python
-
-I’m a technology professional developing my career in **AI Engineering**, with a focus on **Generative AI, LLMs, AI Agents, RAG, and Python**.
-
-My background combines **software development, data engineering, APIs, and cloud computing**. I’m currently building practical AI applications and exploring how to integrate AI models with data, APIs, tools, and real-world systems.
-
-I enjoy learning by building projects and applying software engineering practices to create reliable and useful AI solutions.
+Este projeto apresenta uma solução completa de engenharia e modelagem de dados utilizando os conceitos da **Modern Data Stack (MDS)**. O objetivo do pipeline é extrair dados brutos de desembolsos através da API pública do BNDES (plataforma CKAN), orquestrar o armazenamento em um Data Lake na nuvem, realizar a carga e transformação dos dados via dbt no BigQuery e disponibilizar os insights estratégicos em um painel executivo interativo.
 
 ---
 
-## 🚀 Tech Stack
+## 🏗️ Arquitetura de Dados
 
-### 🤖 AI Engineering
+O fluxo foi desenhado seguindo a arquitetura ELT (Extract, Load, Transform) acoplada aos conceitos de organização de medalhão (Bronze/Silver/Gold):
 
-<p align="left">
-  <img src="https://skillicons.dev/icons?i=python" />
-</p>
+`API BNDES (CKAN)` ➡️ `Python (Docker)` ➡️ `Google Cloud Storage (Bronze)` ➡️ `BigQuery (Silver)` ➡️ `dbt Core (Gold)` ➡️ `Looker Studio`
 
-**Generative AI** • **LLMs** • **RAG** • **AI Agents** • **Prompt Engineering** • **Context Engineering**
 
----
-
-### 🧠 AI Frameworks & APIs
-
-**LangChain** • **LangGraph** • **LlamaIndex** • **AI APIs**
+1. **Ingestão:** Script Python conteinerizado em Docker extrai os dados estruturados da API pública e realiza a paginação e conversão para o formato colunar otimizado **Parquet**.
+2. **Data Lake:** Armazenamento resiliente e de baixo custo no **Google Cloud Storage (GCS)**, servindo como nossa Landing Zone / Camada Bronze.
+3. **Data Warehouse:** Criação de tabelas externas (**External Tables**) no **BigQuery** mapeando os arquivos do Storage diretamente via SQL, eliminando custos de armazenamento duplicado.
+4. **Transformação (dbt):** Modelagem e higienização dos dados dividida entre camadas Staging (Silver) e Marts (Gold) para aplicação das regras de negócio.
+5. **Visualização:** Dashboard corporativo desenvolvido no **Looker Studio** para responder perguntas de negócio de tomadores de decisão.
 
 ---
 
-### 🐍 Development & Data
+## 📸 Evidências do Pipeline em Operação
 
-<p align="left">
-  <img src="https://skillicons.dev/icons?i=python,postgres,docker" />
-</p>
+### 1. Ingestão de Dados e Conteinerização (Docker)
+O script Python realiza chamadas eficientes para a API pública do governo. O isolamento do ambiente via contêiner garante portabilidade total da aplicação.
 
-**Python** • **SQL** • **REST APIs** • **PostgreSQL** • **Docker**
+![Execução do script de ingestão no Docker](img/ingestao.jpg)
 
----
 
-### ☁️ Cloud & Data Engineering
+### 2. Armazenamento na Nuvem (Google Cloud Storage)
+Os dados persistidos pelo contêiner são organizados de maneira estruturada dentro de buckets na GCP em formato Parquet.
 
-<p align="left">
-  <img src="https://skillicons.dev/icons?i=gcp,azure" />
-  <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/googlebigquery.svg" width="48" alt="BigQuery"/>
-</p>
+![Estrutura do Bucket no GCS](img/gcp.png)
 
-**Google Cloud** • **BigQuery** • **Google Cloud Storage** • **dbt**
+### 3. Integração e Consultas no BigQuery
+Criação do Dataset corporativo `raw_bndes` e configuração das External Tables para ler os dados do Storage em tempo real via SQL de alta performance.
 
----
+![Tabelas mapeadas no BigQuery](img/bigquery.png)
 
-### 🔧 Development Tools
+![Resultados de validação SQL no DW](img/consulta-sql.png)
 
-<p align="left">
-  <img src="https://skillicons.dev/icons?i=git,github,vscode" />
-</p>
+### 4. Tomada de Decisão (Dashboard Looker Studio)
+Painel interativo final com os KPIs essenciais de liberação de verbas, volumetria por setor econômico e evolução histórica dos desembolsos.
 
-**Git** • **GitHub** • **VS Code**
+![Dashboard de Desembolsos BNDES](img/relatorio.png)
 
 ---
 
-# 📌 Featured Projects
+## 📖 Dicionário de Dados (Camada Gold/Marts)
 
-## 🤖 Manu Coder — AI Coding Assistant
+A tabela final disponibilizada para consumo de Business Intelligence contém a seguinte estrutura padronizada:
 
-**Manu Coder** is an AI-powered application built with **Python** and **Streamlit** to help students learn programming and improve their Python skills.
-
-The project explores the development of AI-powered applications designed to interact with users and provide contextual assistance during the learning process.
-
-### 🔑 Key Highlights
-
-* AI-powered programming assistant
-* Python learning support
-* Code explanation
-* Assistance with programming exercises
-* Interactive Streamlit interface
-* Integration of AI capabilities into a Python application
-
-**Tech Stack**
-
-`Python` • `Streamlit` • `Generative AI` • `LLMs`
-
-🔗 **Repository:**
-https://github.com/manntanfumu0
+| Nome da Coluna | Tipo de Dado | Descrição | Exemplo |
+| :--- | :--- | :--- | :--- |
+| `ano` | INTEGER | Ano de competência da liberação da verba | `2024` |
+| `mes` | INTEGER | Número do mês da competência da liberação | `8` |
+| `setor_bndes` | STRING | Setor macroeconômico de destino do recurso | `Infraestrutura` |
+| `subsetor_bndes` | STRING | Segmento específico associado ao setor macro | `Energia elétrica` |
+| `desembolsos_reais` | FLOAT | Valor monetário corrigido/líquido liberado (R$) | `12500450.75` |
 
 ---
 
-## 🏦 BNDES Analytics Engineering Pipeline
+## 🛠️ Boas Práticas e Segurança Aplicadas
 
-End-to-end **data engineering pipeline** built with the **Modern Data Stack** for ingesting, transforming, and analyzing public BNDES loan disbursement data on Google Cloud.
-
-This project represents the **data engineering and cloud foundation** of my AI Engineering journey, working with APIs, data pipelines, cloud infrastructure, and analytical systems.
-
-### 🔑 Key Highlights
-
-* Automated data ingestion from the BNDES CKAN API
-* Python-based data extraction
-* Containerized application with Docker
-* Data Lake architecture using Google Cloud Storage
-* BigQuery External Tables
-* ELT transformations with dbt
-* Data quality validation
-* Interactive dashboard with Looker Studio
-
-**Architecture**
-
-```text
-BNDES API
-    │
-    ▼
-Python + Docker
-    │
-    ▼
-Google Cloud Storage
-    │
-    ▼
-BigQuery
-    │
-    ▼
-dbt Core
-    │
-    ▼
-Looker Studio
-```
-
-**Tech Stack**
-
-`Python` • `Docker` • `Google Cloud Storage` • `BigQuery` • `dbt Core` • `Looker Studio`
-
-🔗 **Repository:**
-https://github.com/manntanfumu0/pipeline-desembolsos-bndes
+* **Isolamento de Credenciais:** Uso estrito de variáveis de ambiente via arquivos `.env` e chaves de contas de serviço salvas localmente, mas explicitamente ignoradas via `.gitignore` para prevenir vazamentos acidentais de segurança no GitHub.
+* **Infraestrutura Imutável:** Uso de arquivos `Dockerfile` e `docker-compose.yml` garantindo que qualquer desenvolvedor consiga rodar a esteira com os mesmos comandos de forma reprodutível.
+* **Documentação Viva:** Criação do arquivo de exemplo `credenciais-gcp.example.json` para facilitar o onboarding de novos engenheiros na estrutura do projeto.
 
 ---
 
-## 💳 Credit Approval Analytics
+## 🚀 Como Executar o Projeto
 
-Analytics project that combines **Python, SQL, PostgreSQL, and Power BI** to analyze customer profiles, financial behavior, and credit risk.
+### Pré-requisitos
+* Git instalado
+* Docker e Docker Compose instalados
+* Uma conta ativa na Google Cloud Platform (GCP) com uma Service Account gerada (formato JSON).
 
-This project demonstrates my foundation in **data analysis, SQL, data modeling, and business intelligence**, which supports my transition toward AI Engineering.
+### Passo a Passo
 
-### 🔑 Key Highlights
+1. **Clonar o Repositório:**
+   ```bash
+git clone [https://github.com/seu-usuario/projeto_bndes.git](https://github.com/seu-usuario/projeto_bndes.git)
+   cd projeto_bndes
 
-* Data cleaning and preprocessing with Python
-* Exploratory Data Analysis
-* SQL analytical queries
-* Dimensional modeling
-* Star Schema
-* Interactive Power BI dashboard
-* Business-oriented data analysis
+   2. **Configurar Credenciais**:
+   Insira o arquivo JSON da sua chave GCP na raiz do projeto e mude o nome dele para credentials.json (ou o nome definido no seu arquivo .env).
 
-**Tech Stack**
+Crie um arquivo .env baseado nas configurações do seu ambiente de nuvem.
 
-`Python` • `Pandas` • `PostgreSQL` • `SQL` • `Power BI`
+Construir e Rodar o Container de Ingestão:
+   git clone [https://github.com/seu-usuario/projeto_bndes.git](https://github.com/seu-usuario/projeto_bndes.git)
+   cd projeto_bndes
 
-🔗 **Repository:**
-https://github.com/manntanfumu0/credit-card-analysis
+  3. **Construir e Rodar o Container de Ingestão**:
+     docker-compose up --build
 
----
-
-# 🎯 Career Focus
-
-I’m currently focused on developing my career as a **Junior AI Engineer**, with particular interest in:
-
-* Generative AI
-* LLM Applications
-* RAG
-* AI Agents
-* AI APIs
-* Python
-* AI application architecture
-* Data & Cloud Engineering
-
-My goal is to continuously develop my skills and contribute to building **practical, reliable, and scalable AI applications**.
-
----
-
-# 📫 Connect with me
-
-📍 São Paulo, Brazil
-
-📧 [manuelntanfumu0@gmail.com](mailto:manuelntanfumu0@gmail.com)
-
-💼 https://www.linkedin.com/in/manuel-filipe-manfumu-dataengineer/
-
----
-
-> *Building practical AI applications at the intersection of Artificial Intelligence, Software Engineering, Data, and Cloud.*
+  4. **Executar as Transformações dbt**:
+(Garantir o profiles.yml configurado apontando para o seu BigQuery)
+dbt run
+dbt test
