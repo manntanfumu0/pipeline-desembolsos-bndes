@@ -24,25 +24,29 @@ O fluxo foi desenhado seguindo a arquitetura ELT (Extract, Load, Transform) acop
 ### 1. Ingestão de Dados e Conteinerização (Docker)
 O script Python realiza chamadas eficientes para a API pública do governo. O isolamento do ambiente via contêiner garante portabilidade total da aplicação.
 
-![Execução do script de ingestão no Docker](img/ingestao.jpg)
+<img width="800" height="434" alt="image" src="https://github.com/user-attachments/assets/dfea306c-462c-4d05-8d0f-cf0a4de408f4" />
 
 
 ### 2. Armazenamento na Nuvem (Google Cloud Storage)
 Os dados persistidos pelo contêiner são organizados de maneira estruturada dentro de buckets na GCP em formato Parquet.
 
-![Estrutura do Bucket no GCS](img/gcp.png)
+<img width="800" height="378" alt="image" src="https://github.com/user-attachments/assets/43a17800-4e31-4507-88b4-4f2f094f7504" />
+
 
 ### 3. Integração e Consultas no BigQuery
 Criação do Dataset corporativo `raw_bndes` e configuração das External Tables para ler os dados do Storage em tempo real via SQL de alta performance.
 
-![Tabelas mapeadas no BigQuery](img/bigquery.png)
+<img width="800" height="378" alt="image" src="https://github.com/user-attachments/assets/0b95e177-4026-4a62-88f5-71c0175a8ef2" />
 
-![Resultados de validação SQL no DW](img/consulta-sql.png)
+
+<img width="800" height="378" alt="image" src="https://github.com/user-attachments/assets/1264811d-62bb-4424-ab74-c8e6c3bbee39" />
+
 
 ### 4. Tomada de Decisão (Dashboard Looker Studio)
 Painel interativo final com os KPIs essenciais de liberação de verbas, volumetria por setor econômico e evolução histórica dos desembolsos.
 
-![Dashboard de Desembolsos BNDES](img/relatorio.png)
+<img width="800" height="597" alt="image" src="https://github.com/user-attachments/assets/703cf43c-f0b5-4184-885c-b2428686edfa" />
+
 
 ---
 
